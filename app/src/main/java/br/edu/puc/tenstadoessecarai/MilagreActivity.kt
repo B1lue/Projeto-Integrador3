@@ -3,16 +3,20 @@ package br.edu.puc.tenstadoessecarai
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import br.edu.puc.tenstadoessecarai.databinding.ActivityMilagreBinding
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.functions.FirebaseFunctions
+import com.google.gson.GsonBuilder
 
-class MilagreActivity : AppCompatActivity() {
+class MilagreActivity : AppCompatActivity(), View.OnClickListener{
     private lateinit var nomeEditText: EditText
     private lateinit var emailEditText: EditText
     private lateinit var senhaEditText: EditText
@@ -20,10 +24,18 @@ class MilagreActivity : AppCompatActivity() {
     private lateinit var adicionarEnderecoButton: MaterialButton
     private lateinit var db: FirebaseFirestore
 
+    private val gson = GsonBuilder().enableComplexMapKeySerialization().create()
+
+
+    private lateinit var functions: FirebaseFunctions
+
+    private lateinit var binding:ActivityMilagreBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_milagre)
-        FirebaseApp.initializeApp(this);
+        binding = ActivityMilagreBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        FirebaseApp.initializeApp(this)
 
         nomeEditText = findViewById(R.id.editTextNome)
         emailEditText = findViewById(R.id.editTextEmail)
@@ -33,13 +45,15 @@ class MilagreActivity : AppCompatActivity() {
 
         db = FirebaseFirestore.getInstance()
 
-        adicionarEnderecoButton.setOnClickListener {
+        /*adicionarEnderecoButton.setOnClickListener {
             adicionarEndereco()
         }
 
         cadastrarButton.setOnClickListener {
             cadastrarUsuario()
-        }
+        }*/
+        binding.buttonCadastro.setOnClickListener(this)
+        binding.addAddressButton.setOnClickListener(this)
     }
 
     private fun cadastrarUsuario() {
@@ -69,23 +83,13 @@ class MilagreActivity : AppCompatActivity() {
             "senha" to senha
         )
 
-        FirebaseFunctions.getInstance(FirebaseApp.getInstance(), "southamerica-east1")
-            .getHttpsCallable("cadastrarUsuario")
+
+        FirebaseFunctions.getInstance("southamerica-east1")
+            .getHttpsCallable("setUserProfile")
             .call(dados)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.e(TAG, "sucesso ao mandar usuario para china")
-                    // Salva o usuário no Firestore Database
-                    db.collection("usuarios").document(email).set(dados)
-                        .addOnSuccessListener {
-                            Log.d(TAG, "Usuário salvo com sucesso")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(TAG, "Erro ao salvar o usuário", e)
-                        }
-                } else {
-                    Log.w(TAG, "Erro ao criar o usuário", task.exception)
-                }
+            .continueWith { res ->
+                Log.e("x", "${res.exception}")
+                res.result.data as String
             }
     }
 
@@ -105,4 +109,13 @@ class MilagreActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "MilagreActivity"
     }
+
+    override fun onClick(v: View) {
+        if(v.id == R.id.buttonCadastro){
+            cadastrarUsuario()
+        }
+        Toast.makeText(this, "test", Toast.LENGTH_SHORT).show()
+    }
 }
+
+data class CustomResponse(val status: String?, val message: String?, val payload: Any?)

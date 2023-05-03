@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <!-- Nome do aplicativo no topo da tela -->
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:text="Sorriso24H" />
+
+    <!-- Layout do formulário de login e botão de login -->
+    <LinearLayout
+        android:id="@+id/login_form"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/app_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical">
+
+        <!-- Campo de email -->
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress" />
+
+        <!-- Campo de senha -->
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Senha"
+            android:inputType="textPassword" />
+
+        <!-- Botão de login -->
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:text="Login" />
+
+        <!-- Texto para ir para a tela de cadastro -->
+        <TextView
+            android:id="@+id/register_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:text="Não tem uma conta? Cadastre-se"
+            android:textColor="#0000FF"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>
