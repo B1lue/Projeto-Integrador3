@@ -26,6 +26,7 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_arrow_back"/>
 
+
                 <TextView
                     android:id="@+id/textViewTitle"
                     android:layout_width="wrap_content"

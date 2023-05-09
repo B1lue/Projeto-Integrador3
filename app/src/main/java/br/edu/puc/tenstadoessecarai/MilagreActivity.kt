@@ -37,13 +37,15 @@ class MilagreActivity : AppCompatActivity(), View.OnClickListener{
     private val TAG = "SignUpFragment"
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
-        auth = FirebaseAuth.getInstance()
-        functions = FirebaseFunctions.getInstance()
+
         binding = ActivityMilagreBinding.inflate(layoutInflater)
         setContentView(binding.root)
         FirebaseApp.initializeApp(this)
+
+        auth = FirebaseAuth.getInstance()
+        functions = FirebaseFunctions.getInstance()
+
         nomeEditText = findViewById(R.id.editTextNome)
         emailEditText = findViewById(R.id.editTextEmail)
         senhaEditText = findViewById(R.id.editTextSenha)
@@ -133,6 +135,7 @@ class MilagreActivity : AppCompatActivity(), View.OnClickListener{
                             }
                         }
                 } else {
+                    Log.e("milagre_activity", "${task.exception}")
                     // Exibir mensagem de erro ao criar a conta
                     Log.e(TAG, task.exception?.message ?: "Erro ao criar a conta")
                     Snackbar.make(binding.buttonCadastro, "Erro ao criar a conta", Snackbar.LENGTH_LONG)

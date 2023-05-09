@@ -7,16 +7,28 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.functions.FirebaseFunctions
+import com.google.firebase.functions.ktx.functions
+import com.google.firebase.ktx.Firebase
+import com.google.gson.GsonBuilder
 
 class TelaLogin : AppCompatActivity() {
     private lateinit var emailEditText: EditText
     private lateinit var senhaEditText: EditText
     private lateinit var entrarButton: Button
     private lateinit var cadastrarText: TextView
+    private val TAG = "SignUpFragment"
+    private lateinit var auth: FirebaseAuth
+    private lateinit var functions: FirebaseFunctions
+    private val gson = GsonBuilder().enableComplexMapKeySerialization().create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_login)
+
+        supportActionBar?.hide()
 
         emailEditText = findViewById(R.id.email)
         senhaEditText = findViewById(R.id.password)
@@ -48,10 +60,31 @@ class TelaLogin : AppCompatActivity() {
             return
         }
 
-        // Aqui você pode fazer a lógica de autenticação do usuário, verificando se o email e senha são válidos
         // Para fins de exemplo, vamos apenas abrir a tela de cadastro quando clicar no botão Entrar
-        val intent = Intent(this, MilagreActivity::class.java)
-        startActivity(intent)
+        startActivity(Intent(this, TelaUsuario::class.java))
         finish()
+    }
+    private fun updateUserProfile(nome: String, telefone: String, email: String, uid: String, fcmToken: String) : Task<CustomResponse> {
+        // chamar a function para atualizar o perfil.
+        functions = Firebase.functions("southamerica-east1")
+
+        // Create the arguments to the callable function.
+        val data = hashMapOf(
+            "nome" to nome,
+            "telefone" to telefone,
+            "email" to email,
+            "uid" to uid,
+            "fcmToken" to fcmToken
+        )
+
+        return functions
+            .getHttpsCallable("setUserProfile")
+            .call(data)
+            .continueWith { task ->
+
+                val result = gson.fromJson((task.result?.data as String), CustomResponse::class.java)
+                result
+            }
+
     }
 }

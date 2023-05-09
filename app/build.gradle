@@ -30,10 +30,6 @@ android {
             google()
             mavenCentral()
         }
-
-        dependencies {
-            classpath 'com.google.gms:google-services:4.3.15'
-        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -65,13 +61,18 @@ dependencies {
     implementation 'com.google.firebase:firebase-functions-ktx'
     implementation 'com.google.firebase:firebase-messaging-ktx'
 
-    implementation 'androidx.core:core-ktx:1.10.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.google.firebase:firebase-database-ktx:20.2.0'
+    // APP CHECK em modo de depuração
+    implementation 'com.google.firebase:firebase-appcheck-debug:16.1.2'
+
+    // GSON (Google Json)
+    implementation 'com.google.code.gson:gson:2.9.0'
+
+    // Kotlin Coroutines Worker
+    implementation 'androidx.work:work-runtime-ktx:2.8.1'
+
+    // DataStore
+    implementation "androidx.datastore:datastore-preferences-core:1.0.0"
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
